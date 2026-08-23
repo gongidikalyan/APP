@@ -106014,7 +106014,7 @@ $S:667}
 A.ta.prototype={
 a1(){return new A.a_z()}}
 A.a_z.prototype={
-D(a4){var s,r,q,p,o,n,m,l,k,j,i,h,g,f=this,e=null,d=A.o(a4).ax.a===B.B,c=A.f5(a4,!0,t.T),b=c.c,a=b.x,a0=b.ax,a1=59-59*a0/100,a2=d?B.aR:B.aO,a3=A.bL(e,e,e,A.at(B.b7,d?B.d:B.A,e,20),e,e,new A.aES(a4),e,e,e,e)
+D(a4){var s,r,q,p,o,n,m,l,k,j,i,h,g,f=this,e=null,d=A.o(a4).ax.a===B.B,c=A.f5(a4,!0,t.T),b=c.c,a=b.x,a0=b.ax,a1=49-49*a0/100,a2=d?B.aR:B.aO,a3=A.bL(e,e,e,A.at(B.b7,d?B.d:B.A,e,20),e,e,new A.aES(a4),e,e,e,e)
 a3=A.cQ(e,e,e,e,e,a3,A.m("Pricing & Plans",e,e,e,e,A.H(e,e,d?B.d:B.A,e,e,e,e,e,e,e,e,e,e,e,B.K,e,e,!0,e,e,e,e,e,e,e,e),e,e,e))
 s=A.m("Focus on what matters",e,e,e,e,A.H(e,e,d?B.d:B.A,e,e,e,e,e,e,e,e,24,e,e,B.K,e,e,!0,e,e,e,e,e,e,e,e),e,e,e)
 r=A.m("Unlock your cognitive clarity with tailored focus plans.",e,e,e,e,A.H(e,e,d?B.ae:B.Y,e,e,e,e,e,e,e,e,13,e,e,e,e,1.4,!0,e,e,e,e,e,e,e,e),B.bS,e,e)
@@ -106038,10 +106038,10 @@ if(!d)l.push(new A.aM(0,B.E,A.W(20,B.v.m()>>>16&255,B.v.m()>>>8&255,B.v.m()&255)
 j=A.a([A.m("Pro Plan",e,e,e,e,A.H(e,e,d?B.d:B.V,e,e,e,e,e,e,e,e,22,e,e,B.K,e,e,!0,e,e,e,e,e,e,e,e),e,e,e)],m)
 if(a)j.push(A.Z(e,B.a9q,B.j,e,e,new A.U(A.W(38,B.a6.m()>>>16&255,B.a6.m()>>>8&255,B.a6.m()&255),e,e,A.B(10),e,e,B.p),e,e,e,B.dR,e,e,e))
 j=A.a([A.a1(j,B.i,B.at,B.f,0,e,e),B.a_],m)
-if(a0>0){i=A.a1(A.a([A.m("\u20b9"+B.e.ai(a1,2),e,e,e,e,B.FP,e,e,e),B.aq,A.m("\u20b9"+B.l.ai(59,0),e,e,e,e,B.a6b,e,e,e),B.a9l],m),B.eV,B.h,B.f,0,B.N,e)
+if(a0>0){i=A.a1(A.a([A.m("\u20b9"+B.e.ai(a1,2),e,e,e,e,B.FP,e,e,e),B.aq,A.m("\u20b9"+B.l.ai(49,0),e,e,e,e,B.a6b,e,e,e),B.a9l],m),B.eV,B.h,B.f,0,B.N,e)
 h=A.W(38,B.a6.m()>>>16&255,B.a6.m()>>>8&255,B.a6.m()&255)
 g=A.B(8)
-B.b.M(j,A.a([i,B.b1,A.Z(e,A.m(""+a0+"% Referral Discount Applied (Next cycle)",e,e,e,e,B.a4I,e,e,e),B.j,e,e,new A.U(h,e,e,g,e,e,B.p),e,e,e,B.nc,e,e,e)],m))}else B.b.M(j,A.a([A.xr(e,e,e,B.c4,e,e,!0,e,A.d4(B.TU,e,e,e,e,e,e,e,e,B.FP,"\u20b9"+B.l.ai(59,0)),B.F,e,e,B.ad,B.aJ)],m))
+B.b.M(j,A.a([i,B.b1,A.Z(e,A.m(""+a0+"% Referral Discount Applied (Next cycle)",e,e,e,e,B.a4I,e,e,e),B.j,e,e,new A.U(h,e,e,g,e,e,B.p),e,e,e,B.nc,e,e,e)],m))}else B.b.M(j,A.a([A.xr(e,e,e,B.c4,e,e,!0,e,A.d4(B.TU,e,e,e,e,e,e,e,e,B.FP,"\u20b9"+B.l.ai(49,0)),B.F,e,e,B.ad,B.aJ)],m))
 j.push(B.ew)
 j.push(f.le("Everything Unlimited"))
 j.push(f.le("Infinite Habit Tracking"))
@@ -106069,7 +106069,7 @@ var $async$$0=A.N(function(a,b){if(a===1)return A.J(b,r)
 for(;;)switch(s){case 0:o=q.a
 o.G(new A.aEQ(o))
 s=2
-return A.E(q.b.D_("PREMIUM",59),$async$$0)
+return A.E(q.b.D_("PREMIUM",49),$async$$0)
 case 2:o.G(new A.aER(o))
 if(o.c!=null){o=q.c.a0(t.J).f
 p=q.d
