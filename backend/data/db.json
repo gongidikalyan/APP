@@ -97,6 +97,48 @@
       "isPremium": false,
       "referralCode": "WRINDHA5592",
       "createdAt": "2026-08-24T14:15:25.672Z"
+    },
+    {
+      "id": "u_1787661535633",
+      "username": "user_1787661535",
+      "email": "test_1787661535459@wrindha.org",
+      "name": "user_1787661535",
+      "password": "Password@123",
+      "contact": "test_1787661535459@wrindha.org",
+      "isEmailVerified": true,
+      "focusScore": 0,
+      "activeStreak": 0,
+      "isPremium": false,
+      "referralCode": "WRINDHA9669",
+      "createdAt": "2026-08-25T12:38:55.633Z"
+    },
+    {
+      "id": "u_1787661846231",
+      "username": "user_1787661846",
+      "email": "test_1787661846151@wrindha.org",
+      "name": "user_1787661846",
+      "password": "Password@123",
+      "contact": "test_1787661846151@wrindha.org",
+      "isEmailVerified": true,
+      "focusScore": 0,
+      "activeStreak": 0,
+      "isPremium": false,
+      "referralCode": "WRINDHA1288",
+      "createdAt": "2026-08-25T12:44:06.231Z"
+    },
+    {
+      "id": "u_1787661869037",
+      "username": "user_1787661868",
+      "email": "test_1787661868962@wrindha.org",
+      "name": "user_1787661868",
+      "password": "Password@123",
+      "contact": "test_1787661868962@wrindha.org",
+      "isEmailVerified": true,
+      "focusScore": 0,
+      "activeStreak": 0,
+      "isPremium": true,
+      "referralCode": "WRINDHA9417",
+      "createdAt": "2026-08-25T12:44:29.037Z"
     }
   ],
   "tasks": [
@@ -107,6 +149,42 @@
       "dueDateLabel": "Today",
       "isCompleted": false,
       "createdAt": "2026-08-22T16:44:03.560Z"
+    },
+    {
+      "id": "t_1787661535637",
+      "title": "Complete Algebra Unit 1 Assignment",
+      "category": "STUDY",
+      "tag": "STUDY",
+      "dueDateLabel": "Tomorrow",
+      "dueDate": "2026-08-25T12:38:55.637Z",
+      "dueTime": "05:00 PM",
+      "priority": 1,
+      "isCompleted": false,
+      "createdAt": "2026-08-25T12:38:55.637Z"
+    },
+    {
+      "id": "t_1787661846235",
+      "title": "Complete Algebra Unit 1 Assignment",
+      "category": "STUDY",
+      "tag": "STUDY",
+      "dueDateLabel": "Tomorrow",
+      "dueDate": "2026-08-25T12:44:06.235Z",
+      "dueTime": "05:00 PM",
+      "priority": 1,
+      "isCompleted": false,
+      "createdAt": "2026-08-25T12:44:06.235Z"
+    },
+    {
+      "id": "t_1787661869043",
+      "title": "Complete Algebra Unit 1 Assignment",
+      "category": "STUDY",
+      "tag": "STUDY",
+      "dueDateLabel": "Tomorrow",
+      "dueDate": "2026-08-25T12:44:29.043Z",
+      "dueTime": "05:00 PM",
+      "priority": 1,
+      "isCompleted": false,
+      "createdAt": "2026-08-25T12:44:29.043Z"
     }
   ],
   "expenses": [

@@ -837,12 +837,26 @@ async function handleApiRequest(req, res) {
     });
   }
 
-  if (pathname === '/api/subscriptions/checkout' && method === 'POST') {
+  if ((pathname === '/api/subscriptions/checkout' || pathname === '/api/subscription/create' || pathname === '/api/subscriptions/create') && method === 'POST') {
+    const userId = body.userId;
+    if (userId) {
+      const user = db.users.find(u => u.id === userId);
+      if (user) {
+        user.isPremium = true;
+        saveDB(db);
+      }
+    }
     return sendJSON(res, 200, {
       success: true,
       status: 'ACTIVE',
-      plan: body.plan || 'Free',
-      message: 'Subscription updated successfully!',
+      subscription: {
+        planId: body.planId || body.plan || 'pro_monthly_49',
+        price: body.basePrice || 49,
+        currency: 'INR',
+        status: 'ACTIVE',
+      },
+      plan: body.planId || body.plan || 'PRO_MONTHLY',
+      message: 'Pro subscription activated successfully! All pro features unlocked.',
     });
   }
 
