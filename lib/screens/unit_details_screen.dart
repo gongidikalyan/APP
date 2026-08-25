@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/app_provider.dart';
+import '../widgets/upgrade_pro_modal.dart';
 import 'focus_timer_screen.dart';
 
 class UnitDetailsScreen extends StatefulWidget {
@@ -33,6 +36,9 @@ class _UnitDetailsScreenState extends State<UnitDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final provider = Provider.of<AppProvider>(context);
+    final isPremium = provider.user.isPremium;
+    final isTopicLimitReached = !isPremium && _topics.length >= 2;
     final pPct = (_currentProgress * 100).toInt();
 
     return Scaffold(
@@ -47,8 +53,16 @@ class _UnitDetailsScreenState extends State<UnitDetailsScreen> {
         heroTag: 'unit_details_fab',
         backgroundColor: const Color(0xFF0D5CE5),
         elevation: 4,
-        child: const Icon(Icons.add, color: Colors.white, size: 28),
+        child: Icon(isTopicLimitReached ? Icons.lock_rounded : Icons.add, color: Colors.white, size: 26),
         onPressed: () {
+          if (isTopicLimitReached) {
+            showUpgradeProModal(
+              context,
+              featureTitle: 'Unit Topics',
+              limitExplanation: 'Free plan allows up to 2 topics per unit. Upgrade to Pro for ₹49/month to track unlimited topics and curriculum mastery!',
+            );
+            return;
+          }
           _showAddTopicDialog(context);
         },
       ),
@@ -166,20 +180,29 @@ class _UnitDetailsScreenState extends State<UnitDetailsScreen> {
         children: [
           GestureDetector(
             onTap: () {
+              final provider = Provider.of<AppProvider>(context, listen: false);
+              if (!provider.user.isPremium) {
+                showUpgradeProModal(
+                  context,
+                  featureTitle: 'Topic Mastery',
+                  limitExplanation: 'Free plan allows read-only access. Upgrade to Pro for ₹49/month to track topic completion and revision logs.',
+                );
+                return;
+              }
               setState(() {
                 _topics[index]['isCompleted'] = !isCompleted;
               });
             },
             child: Container(
-              width: 26,
-              height: 26,
+              width: 28,
+              height: 28,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
                 color: isCompleted ? const Color(0xFF0D5CE5) : Colors.transparent,
+                shape: BoxShape.circle,
                 border: Border.all(
                   color: isCompleted
                       ? const Color(0xFF0D5CE5)
-                      : const Color(0xFFCBD5E1),
+                      : (isDark ? const Color(0xFF4C658A) : const Color(0xFFCBD5E1)),
                   width: 2,
                 ),
               ),
@@ -219,6 +242,15 @@ class _UnitDetailsScreenState extends State<UnitDetailsScreen> {
           PopupMenuButton<String>(
             icon: const Icon(Icons.more_vert_rounded, size: 20, color: Color(0xFF94A3B8)),
             onSelected: (val) {
+              final provider = Provider.of<AppProvider>(context, listen: false);
+              if (!provider.user.isPremium) {
+                showUpgradeProModal(
+                  context,
+                  featureTitle: 'Topic Actions',
+                  limitExplanation: 'Free plan allows read-only access. Upgrade to Pro for ₹49/month to customize, edit, or delete curriculum topics.',
+                );
+                return;
+              }
               if (val == 'toggle') {
                 setState(() {
                   _topics[index]['isCompleted'] = !isCompleted;

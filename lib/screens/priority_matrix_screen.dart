@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/app_provider.dart';
+import '../widgets/upgrade_pro_modal.dart';
 import '../theme/app_theme.dart';
 import 'calendar_screen.dart';
 
@@ -65,6 +68,8 @@ class _PriorityMatrixScreenState extends State<PriorityMatrixScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final provider = Provider.of<AppProvider>(context);
+    final isPremium = provider.user.isPremium;
 
     return Scaffold(
       backgroundColor: isDark ? AppTheme.darkBg : AppTheme.lightBg,
@@ -108,12 +113,22 @@ class _PriorityMatrixScreenState extends State<PriorityMatrixScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _showAddTaskModal(context),
+        onPressed: () {
+          if (!isPremium) {
+            showUpgradeProModal(
+              context,
+              featureTitle: 'Priority Matrix Tasks',
+              limitExplanation: 'Free plan includes read-only access. Upgrade to Pro for ₹49/month to create, schedule, and prioritize custom matrix tasks.',
+            );
+          } else {
+            _showAddTaskModal(context);
+          }
+        },
         backgroundColor: isDark ? AppTheme.darkPrimary : AppTheme.primaryAccent,
-        icon: const Icon(Icons.add_task_rounded, color: Colors.white),
-        label: const Text(
-          'Set Task & Deadline',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        icon: Icon(!isPremium ? Icons.lock_rounded : Icons.add_task_rounded, color: Colors.white),
+        label: Text(
+          !isPremium ? 'Set Task & Deadline (Pro)' : 'Set Task & Deadline',
+          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),
       body: SingleChildScrollView(
@@ -121,6 +136,76 @@ class _PriorityMatrixScreenState extends State<PriorityMatrixScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Read-Only Banner for Free Mode
+            if (!isPremium) ...[
+              Container(
+                width: double.infinity,
+                margin: const EdgeInsets.only(bottom: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                decoration: BoxDecoration(
+                  color: (isDark ? const Color(0xFF6366F1) : const Color(0xFF0D5CE5)).withOpacity(0.12),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: (isDark ? const Color(0xFF6366F1) : const Color(0xFF0D5CE5)).withOpacity(0.3),
+                    width: 1,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.visibility_rounded,
+                      color: isDark ? const Color(0xFF818CF8) : const Color(0xFF0D5CE5),
+                      size: 22,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Free Mode: Read-Only Access',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w800,
+                              color: isDark ? Colors.white : AppTheme.lightTextPrimary,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            'Exploring Eisenhower priority matrix in read-only mode. Upgrade to Pro (₹49) to add or edit tasks.',
+                            style: TextStyle(
+                              fontSize: 11.5,
+                              color: isDark ? AppTheme.darkTextSecondary : AppTheme.lightTextSecondary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: isDark ? const Color(0xFF6366F1) : const Color(0xFF0D5CE5),
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        minimumSize: const Size(0, 32),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      onPressed: () {
+                        showUpgradeProModal(
+                          context,
+                          featureTitle: 'Full Priority Matrix',
+                          limitExplanation: 'Upgrade to Pro for ₹49/month to create, prioritize, and manage unlimited tasks and deadlines.',
+                        );
+                      },
+                      child: const Text('Upgrade', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold)),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+
             // Top Banner
             Container(
               width: double.infinity,
@@ -691,6 +776,15 @@ class _PriorityMatrixScreenState extends State<PriorityMatrixScreen> {
                         PopupMenuButton<String>(
                           icon: const Icon(Icons.more_horiz_rounded, color: Color(0xFF94A3B8), size: 18),
                           onSelected: (val) {
+                            final provider = Provider.of<AppProvider>(context, listen: false);
+                            if (!provider.user.isPremium) {
+                              showUpgradeProModal(
+                                context,
+                                featureTitle: 'Task Actions',
+                                limitExplanation: 'Free plan includes read-only access. Upgrade to Pro for ₹49/month to edit, reschedule, complete, or delete priority tasks.',
+                              );
+                              return;
+                            }
                             if (val == 'edit') {
                               _showEditTaskDialog(context, task, priorityLevel);
                             } else if (val == 'complete') {
@@ -873,6 +967,16 @@ class _PriorityMatrixScreenState extends State<PriorityMatrixScreen> {
   }
 
   void _showAddTaskModal(BuildContext context, {int? defaultPriority}) {
+    final provider = Provider.of<AppProvider>(context, listen: false);
+    if (!provider.user.isPremium) {
+      showUpgradeProModal(
+        context,
+        featureTitle: 'Add Priority Task',
+        limitExplanation: 'Free plan includes read-only access. Upgrade to Pro for ₹49/month to create, schedule, and prioritize custom tasks and deadlines.',
+      );
+      return;
+    }
+
     final titleCtrl = TextEditingController();
     String selectedTag = 'STUDY';
     DateTime selectedDate = DateTime.now();
@@ -1242,6 +1346,16 @@ class _PriorityMatrixScreenState extends State<PriorityMatrixScreen> {
   }
 
   void _showEditTaskDialog(BuildContext context, Map<String, dynamic> task, int currentPriority) {
+    final provider = Provider.of<AppProvider>(context, listen: false);
+    if (!provider.user.isPremium) {
+      showUpgradeProModal(
+        context,
+        featureTitle: 'Edit Priority Task',
+        limitExplanation: 'Free plan includes read-only access. Upgrade to Pro for ₹49/month to modify priority levels, dates, and deadlines.',
+      );
+      return;
+    }
+
     final titleCtrl = TextEditingController(text: task['title'] as String);
     DateTime selectedDate = task['dueDate'] as DateTime? ?? DateTime.now();
     TimeOfDay selectedTime = task['dueTime'] as TimeOfDay? ?? const TimeOfDay(hour: 18, minute: 0);

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/app_provider.dart';
+import '../widgets/upgrade_pro_modal.dart';
 import '../theme/app_theme.dart';
 import 'add_milestone_screen.dart';
 
@@ -15,6 +18,8 @@ class _MilestonesScreenState extends State<MilestonesScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final provider = Provider.of<AppProvider>(context);
+    final isPremium = provider.user.isPremium;
 
     return Scaffold(
       backgroundColor: isDark ? AppTheme.darkBg : AppTheme.lightBg,
@@ -40,8 +45,20 @@ class _MilestonesScreenState extends State<MilestonesScreen> {
         backgroundColor: isDark ? AppTheme.darkPrimary : AppTheme.pastelGrowthIcon,
         shape: const CircleBorder(),
         elevation: 4,
-        child: const Icon(Icons.add, color: Colors.white, size: 28),
+        child: Icon(
+          !isPremium ? Icons.lock_rounded : Icons.add,
+          color: Colors.white,
+          size: 26,
+        ),
         onPressed: () {
+          if (!isPremium) {
+            showUpgradeProModal(
+              context,
+              featureTitle: 'Achieved Milestones',
+              limitExplanation: 'Free plan gives you read-only access. Upgrade to Pro for ₹49/month to record, track, and celebrate personal achievements.',
+            );
+            return;
+          }
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -83,6 +100,14 @@ class _MilestonesScreenState extends State<MilestonesScreen> {
           // Dashed Achievement Container
           GestureDetector(
             onTap: () {
+              if (!isPremium) {
+                showUpgradeProModal(
+                  context,
+                  featureTitle: 'Add Milestone',
+                  limitExplanation: 'Upgrade to Pro for ₹49/month to record custom milestones and achievements.',
+                );
+                return;
+              }
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -100,19 +125,18 @@ class _MilestonesScreenState extends State<MilestonesScreen> {
                   width: 1.5,
                 ),
               ),
-              child: const Column(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.emoji_events_outlined,
-                      color: Color(0xFF94A3B8), size: 36),
-                  SizedBox(height: 8),
+                  Icon(
+                    !isPremium ? Icons.lock_rounded : Icons.emoji_events_outlined,
+                    color: const Color(0xFF94A3B8),
+                    size: 32,
+                  ),
+                  const SizedBox(height: 8),
                   Text(
-                    "What's your next big achievement?",
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xFF94A3B8),
-                    ),
+                    !isPremium ? "Add Milestone (Pro Feature)" : "What's your next big achievement?",
+                    style: const TextStyle(fontSize: 13, color: Color(0xFF94A3B8), fontWeight: FontWeight.w600),
                   ),
                 ],
               ),

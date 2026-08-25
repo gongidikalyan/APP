@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/app_provider.dart';
+import '../widgets/upgrade_pro_modal.dart';
 import '../theme/app_theme.dart';
-import 'goal_achieved_screen.dart';
 
 class ShortTermPrioritiesScreen extends StatefulWidget {
   const ShortTermPrioritiesScreen({super.key});
@@ -11,11 +13,38 @@ class ShortTermPrioritiesScreen extends StatefulWidget {
 }
 
 class _ShortTermPrioritiesScreenState extends State<ShortTermPrioritiesScreen> {
-  List<Map<String, dynamic>> _priorities = [];
+  final List<Map<String, dynamic>> _priorities = [
+    {
+      'title': 'Read chapter 3 of Physics book',
+      'subtitle': '0/15 pages completed',
+      'progress': 0.0,
+      'isCompleted': false,
+      'type': 'progress',
+      'dueText': 'Due Today'
+    },
+    {
+      'title': 'Review flashcards for Biology',
+      'subtitle': '0/30 cards reviewed',
+      'progress': 0.0,
+      'isCompleted': false,
+      'type': 'progress',
+      'dueText': 'Due tomorrow'
+    },
+    {
+      'title': 'Complete Chemistry worksheet',
+      'subtitle': 'Due tomorrow, 5:00 PM',
+      'isCompleted': false,
+      'type': 'urgent',
+      'estTime': '45 min',
+      'tag': 'HIGH PRIORITY'
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final provider = Provider.of<AppProvider>(context);
+    final isPremium = provider.user.isPremium;
 
     return Scaffold(
       backgroundColor: isDark ? AppTheme.darkBg : AppTheme.lightBg,
@@ -50,6 +79,76 @@ class _ShortTermPrioritiesScreenState extends State<ShortTermPrioritiesScreen> {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
         children: [
+          // Read-Only Banner for Free Mode
+          if (!isPremium) ...[
+            Container(
+              width: double.infinity,
+              margin: const EdgeInsets.only(bottom: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: (isDark ? const Color(0xFF6366F1) : const Color(0xFF0D5CE5)).withOpacity(0.12),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: (isDark ? const Color(0xFF6366F1) : const Color(0xFF0D5CE5)).withOpacity(0.3),
+                  width: 1,
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.visibility_rounded,
+                    color: isDark ? const Color(0xFF818CF8) : const Color(0xFF0D5CE5),
+                    size: 22,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Free Mode: Read-Only Access',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w800,
+                            color: isDark ? Colors.white : AppTheme.lightTextPrimary,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          'Viewing short term priorities in read-only mode. Upgrade to Pro (₹49) to add or complete items.',
+                          style: TextStyle(
+                            fontSize: 11.5,
+                            color: isDark ? AppTheme.darkTextSecondary : AppTheme.lightTextSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: isDark ? const Color(0xFF6366F1) : const Color(0xFF0D5CE5),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      minimumSize: const Size(0, 32),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () {
+                      showUpgradeProModal(
+                        context,
+                        featureTitle: 'Short Term Priorities',
+                        limitExplanation: 'Upgrade to Pro for ₹49/month to track and complete 7-day focus items.',
+                      );
+                    },
+                    child: const Text('Upgrade', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold)),
+                  ),
+                ],
+              ),
+            ),
+          ],
+
           Text(
             'Short Term Priorities',
             style: TextStyle(
@@ -71,7 +170,7 @@ class _ShortTermPrioritiesScreenState extends State<ShortTermPrioritiesScreen> {
           ..._priorities.asMap().entries.map((entry) {
             final idx = entry.key;
             final item = entry.value;
-            return _buildPriorityCard(context, idx, item);
+            return _buildPriorityCard(context, idx, item, isPremium);
           }).toList(),
           const SizedBox(height: 30),
         ],
@@ -80,7 +179,7 @@ class _ShortTermPrioritiesScreenState extends State<ShortTermPrioritiesScreen> {
   }
 
   Widget _buildPriorityCard(
-      BuildContext context, int index, Map<String, dynamic> item) {
+      BuildContext context, int index, Map<String, dynamic> item, bool isPremium) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final isCompleted = item['isCompleted'] == true;
 
@@ -95,7 +194,6 @@ class _ShortTermPrioritiesScreenState extends State<ShortTermPrioritiesScreen> {
       child: IntrinsicHeight(
         child: Row(
           children: [
-            // Left Accent Border
             Container(
               width: 5,
               decoration: BoxDecoration(
@@ -147,13 +245,33 @@ class _ShortTermPrioritiesScreenState extends State<ShortTermPrioritiesScreen> {
                           Row(
                             children: [
                               GestureDetector(
-                                onTap: () {},
-                                child: const Icon(Icons.edit_outlined,
-                                    size: 18, color: Color(0xFF64748B)),
+                                onTap: () {
+                                  if (!isPremium) {
+                                    showUpgradeProModal(
+                                      context,
+                                      featureTitle: 'Edit Priority',
+                                      limitExplanation: 'Free plan gives you read-only access. Upgrade to Pro for ₹49/month to edit short-term priorities.',
+                                    );
+                                    return;
+                                  }
+                                },
+                                child: Icon(
+                                  !isPremium ? Icons.lock_rounded : Icons.edit_outlined,
+                                  size: 18,
+                                  color: const Color(0xFF64748B),
+                                ),
                               ),
                               const SizedBox(width: 12),
                               GestureDetector(
                                 onTap: () {
+                                  if (!isPremium) {
+                                    showUpgradeProModal(
+                                      context,
+                                      featureTitle: 'Delete Priority',
+                                      limitExplanation: 'Free plan gives you read-only access. Upgrade to Pro for ₹49/month to delete short-term priorities.',
+                                    );
+                                    return;
+                                  }
                                   setState(() {
                                     _priorities.removeAt(index);
                                   });
