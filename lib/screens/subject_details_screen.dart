@@ -32,6 +32,8 @@ class _SubjectDetailsScreenState extends State<SubjectDetailsScreen> {
     final provider = Provider.of<AppProvider>(context);
     final isPremium = provider.user.isPremium;
 
+    final isUnitLimitReached = !isPremium && _units.length >= 2;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -44,13 +46,13 @@ class _SubjectDetailsScreenState extends State<SubjectDetailsScreen> {
         heroTag: 'subject_details_fab',
         backgroundColor: const Color(0xFF0D5CE5),
         elevation: 4,
-        icon: const Icon(Icons.add, color: Colors.white),
-        label: const Text(
-          'Add Unit',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        icon: Icon(isUnitLimitReached ? Icons.lock_rounded : Icons.add, color: Colors.white),
+        label: Text(
+          isUnitLimitReached ? 'Add Unit (Pro)' : 'Add Unit',
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         onPressed: () {
-          if (!isPremium && _units.length >= 2) {
+          if (isUnitLimitReached) {
             showUpgradeProModal(
               context,
               featureTitle: 'Curriculum Units',

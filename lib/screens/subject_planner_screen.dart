@@ -19,6 +19,9 @@ class _SubjectPlannerScreenState extends State<SubjectPlannerScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final provider = Provider.of<AppProvider>(context);
+    final isPremium = provider.user.isPremium;
+    final isLimitReached = !isPremium && _subjects.length >= 2;
 
     return Scaffold(
       backgroundColor: isDark ? AppTheme.darkBg : AppTheme.lightBg,
@@ -43,15 +46,13 @@ class _SubjectPlannerScreenState extends State<SubjectPlannerScreen> {
         heroTag: 'subject_planner_fab',
         backgroundColor: isDark ? AppTheme.darkPrimary : AppTheme.pastelStudiesIcon,
         elevation: 4,
-        icon: const Icon(Icons.add, color: Colors.white),
-        label: const Text(
-          'Add Subject',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        icon: Icon(isLimitReached ? Icons.lock_rounded : Icons.add, color: Colors.white),
+        label: Text(
+          isLimitReached ? 'Add Subject (Pro)' : 'Add Subject',
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         onPressed: () {
-          final provider = Provider.of<AppProvider>(context, listen: false);
-          final isPremium = provider.user.isPremium;
-          if (!isPremium && _subjects.length >= 2) {
+          if (isLimitReached) {
             showUpgradeProModal(
               context,
               featureTitle: 'Subjects',

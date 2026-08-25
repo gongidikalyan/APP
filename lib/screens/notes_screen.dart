@@ -44,7 +44,11 @@ class _NotesScreenState extends State<NotesScreen> {
         backgroundColor: isDark ? AppTheme.darkPrimary : AppTheme.pastelGrowthIcon,
         shape: const CircleBorder(),
         elevation: 4,
-        child: const Icon(Icons.add, color: Colors.white, size: 28),
+        child: Icon(
+          !isPremium ? Icons.lock_rounded : Icons.add,
+          color: Colors.white,
+          size: 26,
+        ),
         onPressed: () {
           if (!isPremium) {
             showUpgradeProModal(
@@ -180,13 +184,13 @@ class _NotesScreenState extends State<NotesScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
-                    Icons.edit_note_rounded,
+                    !isPremium ? Icons.lock_rounded : Icons.edit_note_rounded,
                     color: isDark ? AppTheme.darkIconGlow : AppTheme.pastelGrowthIcon,
-                    size: 30,
+                    size: 28,
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Click to write a quick journal entry',
+                    !isPremium ? 'Click to write a quick journal entry (Pro)' : 'Click to write a quick journal entry',
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,

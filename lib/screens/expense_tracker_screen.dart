@@ -254,13 +254,17 @@ class ExpenseTrackerScreen extends StatelessWidget {
         backgroundColor: isDark ? AppTheme.darkPrimary : AppTheme.primaryAccent,
         shape: const CircleBorder(),
         elevation: 4,
-        child: const Icon(Icons.add, color: Colors.white, size: 28),
+        child: Icon(
+          !provider.user.isPremium ? Icons.lock_rounded : Icons.add,
+          color: Colors.white,
+          size: 26,
+        ),
         onPressed: () {
           if (!provider.user.isPremium) {
             showUpgradeProModal(
               context,
-              featureTitle: 'Add Expense Transaction',
-              limitExplanation: 'Free plan gives you read-only access to view expenses. Upgrade to Pro for ₹49/month to record custom income and expense transactions.',
+              featureTitle: 'Add Expense & Income',
+              limitExplanation: 'Free plan gives you read-only access. Upgrade to Pro for ₹49/month to record expenses, track transactions, and manage monthly budgets.',
             );
           } else {
             Navigator.push(
@@ -313,7 +317,7 @@ class ExpenseTrackerScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            'Viewing expenses & ledger in read-only mode. Upgrade to Pro (₹49) to add or edit transactions.',
+                            'Viewing expense ledger in read-only mode. Upgrade to Pro (₹49) to add or edit transactions.',
                             style: TextStyle(
                               fontSize: 11.5,
                               color: isDark ? AppTheme.darkTextSecondary : AppTheme.textSecondary,
@@ -375,7 +379,7 @@ class ExpenseTrackerScreen extends StatelessWidget {
                       InkWell(
                         onTap: () => _showEditBudgetDialog(context, provider),
                         child: Icon(
-                          Icons.edit_outlined,
+                          !provider.user.isPremium ? Icons.lock_rounded : Icons.edit_outlined,
                           size: 16,
                           color: isDark ? AppTheme.darkIconGlow : AppTheme.primaryAccent,
                         ),

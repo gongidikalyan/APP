@@ -48,7 +48,11 @@ class CalendarScreen extends StatelessWidget {
         backgroundColor: primaryColor,
         shape: const CircleBorder(),
         elevation: 4,
-        child: const Icon(Icons.add, color: Colors.white, size: 28),
+        child: Icon(
+          (!provider.user.isPremium && events.length >= 2) ? Icons.lock_rounded : Icons.add,
+          color: Colors.white,
+          size: 26,
+        ),
         onPressed: () => _showAddEventDialog(context),
       ),
       body: SingleChildScrollView(

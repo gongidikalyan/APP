@@ -472,6 +472,14 @@ class CareerScreen extends StatelessWidget {
                     color: isDark ? AppTheme.darkIconGlow : AppTheme.pastelCareerIcon,
                   ),
                 ),
+                if (!isPremium) ...[
+                  const SizedBox(width: 6),
+                  Icon(
+                    Icons.lock_rounded,
+                    size: 15,
+                    color: isDark ? AppTheme.darkTextSecondary : const Color(0xFF94A3B8),
+                  ),
+                ],
                 const SizedBox(width: 8),
                 Icon(
                   Icons.chevron_right_rounded,

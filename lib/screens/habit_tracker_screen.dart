@@ -43,9 +43,12 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
         backgroundColor: isDark ? AppTheme.darkPrimary : AppTheme.primaryAccent,
         shape: const CircleBorder(),
         elevation: 4,
-        child: const Icon(Icons.add, color: Colors.white, size: 28),
+        child: Icon(
+          (!provider.user.isPremium && _habits.length >= 2) ? Icons.lock_rounded : Icons.add,
+          color: Colors.white,
+          size: 26,
+        ),
         onPressed: () {
-          final provider = Provider.of<AppProvider>(context, listen: false);
           final isPremium = provider.user.isPremium;
           if (!isPremium && _habits.length >= 2) {
             showUpgradeProModal(

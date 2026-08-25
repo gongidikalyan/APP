@@ -34,15 +34,18 @@ class _GoalPyramidScreenState extends State<GoalPyramidScreen> {
         heroTag: 'goal_pyramid_fab',
         backgroundColor: const Color(0xFF0D5CE5),
         elevation: 4,
-        child: const Icon(Icons.add, color: Colors.white, size: 28),
+        child: Icon(
+          (!provider.user.isPremium && totalGoals >= 2) ? Icons.lock_rounded : Icons.add,
+          color: Colors.white,
+          size: 26,
+        ),
         onPressed: () {
-          final provider = Provider.of<AppProvider>(context, listen: false);
           final isPremium = provider.user.isPremium;
           if (!isPremium && totalGoals >= 2) {
             showUpgradeProModal(
               context,
               featureTitle: 'Goals Hierarchy',
-              limitExplanation: 'Free plan includes up to 2 active goals. Upgrade to Pro for ₹49/month to track unlimited OKRs and goal pyramid milestones!',
+              limitExplanation: 'Free plan includes up to 2 active goals across short, medium, or long term. Upgrade to Pro for ₹49/month to track unlimited goals!',
             );
           } else {
             _showAddGoalDialog(context);

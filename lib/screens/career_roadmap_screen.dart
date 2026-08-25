@@ -94,10 +94,10 @@ class _CareerRoadmapScreenState extends State<CareerRoadmapScreen> {
         heroTag: 'career_floating_fab',
         backgroundColor: isDark ? AppTheme.darkPrimary : AppTheme.pastelCareerIcon,
         elevation: 6,
-        icon: const Icon(Icons.add, color: Colors.white),
-        label: const Text(
-          'Add Milestone',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        icon: Icon(!isPremium ? Icons.lock_rounded : Icons.add, color: Colors.white),
+        label: Text(
+          !isPremium ? 'Add Milestone (Pro)' : 'Add Milestone',
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         onPressed: () {
           if (!isPremium) {
@@ -588,15 +588,19 @@ class _CareerRoadmapScreenState extends State<CareerRoadmapScreen> {
                     }
                   },
                   icon: Icon(
-                    isCompleted
-                        ? Icons.check_circle_rounded
-                        : Icons.play_arrow_rounded,
+                    !provider.user.isPremium
+                        ? Icons.lock_rounded
+                        : (isCompleted
+                            ? Icons.check_circle_rounded
+                            : Icons.play_arrow_rounded),
                     color: Colors.white,
                   ),
                   label: Text(
-                    isCompleted
-                        ? 'Completed (+${node['xp']} XP)'
-                        : 'Mark as Completed (+${node['xp']} XP)',
+                    !provider.user.isPremium
+                        ? 'Unlock to Mark as Completed (₹49)'
+                        : (isCompleted
+                            ? 'Completed (+${node['xp']} XP)'
+                            : 'Mark as Completed (+${node['xp']} XP)'),
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 15,

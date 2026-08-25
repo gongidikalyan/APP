@@ -277,7 +277,11 @@ class _OrganizeMatrixScreenState extends State<OrganizeMatrixScreen> {
                     color: isDark ? AppTheme.darkIconBg : Colors.white.withOpacity(0.8),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(Icons.add, size: 14, color: isDark ? AppTheme.darkIconGlow : iconColor),
+                  child: Icon(
+                    !isPremium ? Icons.lock_rounded : Icons.add,
+                    size: 13,
+                    color: isDark ? AppTheme.darkIconGlow : iconColor,
+                  ),
                 ),
               ),
             ],
