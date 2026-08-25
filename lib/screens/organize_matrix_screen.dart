@@ -307,6 +307,15 @@ class _OrganizeMatrixScreenState extends State<OrganizeMatrixScreen> {
 
               return GestureDetector(
                 onTap: () {
+                  final provider = Provider.of<AppProvider>(context, listen: false);
+                  if (!provider.user.isPremium) {
+                    showUpgradeProModal(
+                      context,
+                      featureTitle: 'Matrix Task Completion',
+                      limitExplanation: 'Free plan includes read-only access. Upgrade to Pro for ₹49/month to complete and organize custom matrix tasks.',
+                    );
+                    return;
+                  }
                   setState(() {
                     tasks[idx]['isCompleted'] = !isCompleted;
                   });

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_provider.dart';
+import '../widgets/upgrade_pro_modal.dart';
 import '../theme/app_theme.dart';
 
 class AddExpenseScreen extends StatefulWidget {
@@ -25,6 +26,15 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   }
 
   void _handleSave(AppProvider provider) {
+    if (!provider.user.isPremium) {
+      showUpgradeProModal(
+        context,
+        featureTitle: 'Add Expense & Income',
+        limitExplanation: 'Free plan gives you read-only access to view expenses. Upgrade to Pro for ₹49/month to record custom income and expense transactions.',
+      );
+      return;
+    }
+
     if (_isSaving) return; // Prevent duplicate submissions
 
     final amountText = _amountCtrl.text.trim();

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/app_provider.dart';
+import '../widgets/upgrade_pro_modal.dart';
 
 class AddMilestoneScreen extends StatefulWidget {
   const AddMilestoneScreen({super.key});
@@ -298,6 +301,15 @@ class _AddMilestoneScreenState extends State<AddMilestoneScreen> {
                         ),
                       ),
                       onPressed: () {
+                        final provider = Provider.of<AppProvider>(context, listen: false);
+                        if (!provider.user.isPremium) {
+                          showUpgradeProModal(
+                            context,
+                            featureTitle: 'Add Career Milestone',
+                            limitExplanation: 'Free plan includes read-only access. Upgrade to Pro for ₹49/month to record and track custom career milestones.',
+                          );
+                          return;
+                        }
                         if (_titleCtrl.text.trim().isNotEmpty) {
                           Navigator.pop(context, {
                             'category': _category.toUpperCase(),
