@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../providers/app_provider.dart';
+import '../widgets/upgrade_pro_modal.dart';
 import '../theme/app_theme.dart';
 
 class CalendarScreen extends StatelessWidget {
@@ -503,6 +504,15 @@ class CalendarScreen extends StatelessWidget {
   }
 
   void _showEditEventDialog(BuildContext context, AppProvider provider, dynamic event) {
+    if (!provider.user.isPremium) {
+      showUpgradeProModal(
+        context,
+        featureTitle: 'Edit Calendar Event',
+        limitExplanation: 'Free plan includes read-only timetable access. Upgrade to Pro for ₹49/month to modify scheduled classes and deep work sessions.',
+      );
+      return;
+    }
+
     final titleCtrl = TextEditingController(text: event.title);
     final descCtrl = TextEditingController(text: event.description);
     final locationCtrl = TextEditingController(text: event.location);
@@ -561,6 +571,15 @@ class CalendarScreen extends StatelessWidget {
 
   void _showAddEventDialog(BuildContext context) {
     final provider = Provider.of<AppProvider>(context, listen: false);
+    if (!provider.user.isPremium && provider.calendarEvents.length >= 2) {
+      showUpgradeProModal(
+        context,
+        featureTitle: 'Calendar Events',
+        limitExplanation: 'Free plan includes up to 2 scheduled calendar events. Upgrade to Pro for ₹49/month to schedule unlimited classes, study blocks, and reminders!',
+      );
+      return;
+    }
+
     final now = DateTime.now();
     final todayMidnight = DateTime(now.year, now.month, now.day);
     

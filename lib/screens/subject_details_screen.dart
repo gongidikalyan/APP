@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/app_provider.dart';
+import '../widgets/upgrade_pro_modal.dart';
 import 'add_unit_screen.dart';
 import 'unit_details_screen.dart';
 
@@ -26,6 +29,8 @@ class _SubjectDetailsScreenState extends State<SubjectDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final provider = Provider.of<AppProvider>(context);
+    final isPremium = provider.user.isPremium;
 
     return Scaffold(
       appBar: AppBar(
@@ -45,6 +50,14 @@ class _SubjectDetailsScreenState extends State<SubjectDetailsScreen> {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         onPressed: () {
+          if (!isPremium && _units.length >= 2) {
+            showUpgradeProModal(
+              context,
+              featureTitle: 'Curriculum Units',
+              limitExplanation: 'Free plan includes up to 2 units per subject. Upgrade to Pro for ₹49/month to add unlimited curriculum units and topic roadmaps!',
+            );
+            return;
+          }
           Navigator.push(
             context,
             MaterialPageRoute(
